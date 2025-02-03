@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608912964960",
+    "project_id": "apconic-assist",
+    "storage_bucket": "apconic-assist.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608912964960:android:5970dbdf93651be3083205",
+        "android_client_info": {
+          "package_name": "com.apconicassist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClJD31W5GuBVlwq4dnTPDUQUc50tSgtIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
