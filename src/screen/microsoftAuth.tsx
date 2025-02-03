@@ -1,6 +1,7 @@
 import { Button, Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 interface UserInfo {
     "@odata.context": string;
     businessPhones: string[];
@@ -17,6 +18,53 @@ interface UserInfo {
 }
 function MicrosoftSignIn() {
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+    // const checkOrAddUserInFirestore = async userDetails => {
+    //     try {
+    //         const userCollection = firestore().collection('employee');
+    //         const querySnapshot = await userCollection
+    //             .where('email', '==', userInfo.mail )
+    //             .get();
+    //         if (!querySnapshot.empty) {
+    //             const userDoc = querySnapshot.docs[0];
+    //             console.log('User exists in Firestore:', userDoc.data());
+    //             Alert.alert('User Found', `Welcome back, ${userDoc.data().displayName}`);
+    //         } else {
+    //             const newUser = {
+    //                email : userInfo.mail || null,
+    //                phoneNumber : userInfo.mobilePhone || null,
+    //             };
+    //             await userCollection.add(newUser);
+    //             console.log('New user added to Firestore:', newUser);
+    //             Alert.alert('New User Added', `Welcome, ${newUser.displayName}`);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error checking or adding user in Firestore:', error);
+    //         Alert.alert('Error', 'Failed to check or add user in Firestore.');
+    //     }
+    // };
+    const saveUserToFirestore = async (user: UserInfo) => {
+        try {
+            const userRef = firestore().collection('employees').doc(user.id);
+            const docSnapshot = await userRef.get();
+
+            if (!docSnapshot.exists) {
+                await userRef.set({
+                    firstName: user.givenName,
+                    lastName: user.surname,
+                    email: user.mail,
+                    mobilePhone: user.mobilePhone ?? "Not Available",
+                    createdAt: firestore.FieldValue.serverTimestamp(),
+                    status: null
+                });
+
+                console.log("User saved to Firestore:", user.displayName);
+            } else {
+                console.log("User already exists in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error saving user to Firestore:", error);
+        }
+    };
     const onMicrosoftButtonPress = async () => {
         // console.log('Microsoft Sign-In Button Pressed');
         // Generate the provider object
@@ -33,6 +81,7 @@ function MicrosoftSignIn() {
         await auth().signInWithRedirect(provider).then((result: any) => {
             console.log('result', result);
             setUserInfo(result.additionalUserInfo.profile);
+            saveUserToFirestore(result.additionalUserInfo.profile);
         })
     };
     return (
