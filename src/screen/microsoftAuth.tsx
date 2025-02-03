@@ -1,7 +1,8 @@
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View  ,TextInput  , Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 interface UserInfo {
     "@odata.context": string;
     businessPhones: string[];
@@ -18,6 +19,9 @@ interface UserInfo {
 }
 function MicrosoftSignIn() {
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+    const [mobileNumber, setMobileNumber] = useState<string>("");
+    const [isMobileRequired, setIsMobileRequired] = useState<boolean>(false);
+    const navigation = useNavigation();
     // const checkOrAddUserInFirestore = async userDetails => {
     //     try {
     //         const userCollection = firestore().collection('employee');
@@ -42,7 +46,7 @@ function MicrosoftSignIn() {
     //         Alert.alert('Error', 'Failed to check or add user in Firestore.');
     //     }
     // };
-    const saveUserToFirestore = async (user: UserInfo) => {
+    const saveUserToFirestore = async (user: UserInfo, mobilePhone?: string) => {
         try {
             const userRef = firestore().collection('employees').doc(user.id);
             const docSnapshot = await userRef.get();
@@ -52,17 +56,25 @@ function MicrosoftSignIn() {
                     firstName: user.givenName,
                     lastName: user.surname,
                     email: user.mail,
-                    mobilePhone: user.mobilePhone ?? "Not Available",
+                    mobilePhone: mobilePhone || user.mobilePhone, // Use entered mobile if missing
                     createdAt: firestore.FieldValue.serverTimestamp(),
                     status: null
                 });
 
-                console.log("User saved to Firestore:", user.displayName);
+                console.log("User saved to Firestore:", user.givenName);
+                Alert.alert("Success", "User data saved successfully!");
+
+                setIsMobileRequired(false); // Hide input field
+                setUserInfo(null); // Reset user state
+                navigation.navigate('HomeScreen'); // Navigate to HomeScreen
+                
             } else {
                 console.log("User already exists in Firestore.");
+                Alert.alert("User Exists", "User data already exists in Firestore.");
             }
         } catch (error) {
             console.error("Error saving user to Firestore:", error);
+            Alert.alert("Error", "Failed to save user data.");
         }
     };
     const onMicrosoftButtonPress = async () => {
@@ -81,7 +93,13 @@ function MicrosoftSignIn() {
         await auth().signInWithRedirect(provider).then((result: any) => {
             console.log('result', result);
             setUserInfo(result.additionalUserInfo.profile);
-            saveUserToFirestore(result.additionalUserInfo.profile);
+            // saveUserToFirestore(result.additionalUserInfo.profile);
+
+            if (!userInfo.mobilePhone) {
+                setIsMobileRequired(true); // Show input field if mobile number is missing
+            } else {
+                saveUserToFirestore(result.additionalUserInfo.profile);
+            }
         })
     };
     return (
@@ -90,19 +108,35 @@ function MicrosoftSignIn() {
                 title="Microsoft Sign-In"
                 onPress={() => onMicrosoftButtonPress()}
             />
-            {
-                userInfo && (
-                    <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        <Text style={{ color: "black" }}>Name : {userInfo.displayName}</Text>
-                        <Text>
-                            unique id : {userInfo.id}
-                        </Text>
-                        <Text> email : {userInfo.mail}</Text>
-                        <Text>Job Title: {userInfo.jobTitle ?? "Not Available"}</Text>
-                        <Text> Office location : {userInfo.officeLocation ?? "Not Available"}</Text>
-                    </View>
-                )
-            }
+            {userInfo && isMobileRequired && (
+                <View style={{ marginTop: 20 }}>
+                    <Text>Please enter your mobile number:</Text>
+                    <TextInput
+                        style={{
+                            borderWidth: 1,
+                            borderColor: "gray",
+                            padding: 10,
+                            marginTop: 10,
+                            width: 200,
+                            borderRadius: 5
+                        }}
+                        placeholder="Enter Mobile Number"
+                        keyboardType="phone-pad"
+                        value={mobileNumber}
+                        onChangeText={setMobileNumber}
+                    />
+                    <Button
+                        title="Save Mobile & Proceed"
+                        onPress={() => {
+                            if (mobileNumber.length < 10) {
+                                Alert.alert("Invalid", "Please enter a valid mobile number.");
+                            } else {
+                                saveUserToFirestore(userInfo, mobileNumber);
+                            }
+                        }}
+                    />
+                </View>
+            )}
         </View>
     );
 }
