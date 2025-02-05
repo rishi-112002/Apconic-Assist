@@ -71,7 +71,7 @@ function MicrosoftSignIn() {
 
           if (existingUser?.mobilePhone) {
             console.log('User found, navigating immediately...');
-            navigation.replace('HomeScreen'); // 🚀 Navigate instantly!
+            navigation.replace('HomeScreen');
           } else {
             setUserInfo(user);
             setMobileModalVisible(true); // Show mobile number modal
