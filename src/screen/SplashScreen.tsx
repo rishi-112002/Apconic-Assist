@@ -7,6 +7,7 @@ import colors from '../assest/color/colors';
 function SplashScreen() {
     const { ring1Style, logoStyle } = SplashEffect();
     return (
+
         <View style={STYLES.Splash_container}>
             <StatusBar backgroundColor={colors.HelperTextColor}
                 networkActivityIndicatorVisible={true}

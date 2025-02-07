@@ -17,6 +17,8 @@ import { useState } from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AuthStackScreenName } from '../navigation/HomeNavigation';
 import colors from '../assest/color/colors';
+import { store } from '../redux/Store';
+import { loginUser } from '../redux/login/LoginAction';
 
 
 interface UserInfo {
@@ -70,12 +72,14 @@ function MicrosoftSignIn() {
     // Start checking user in Firestore without blocking UI
     userRef
       .get()
-      .then(docSnapshot => {
+      .then(async docSnapshot => {
         if (docSnapshot.exists) {
           const existingUser = docSnapshot.data();
 
           if (existingUser?.mobilePhone) {
+            console.log("existingUser?.email" , existingUser?.email)
             // console.log('User found, navigating immediately...');
+           await store.dispatch(loginUser({userEmail: existingUser?.email}))
             navigation.navigate('HomeScreen'); // 🚀 Navigate instantly!
           } else {
             setUserInfo(user);
@@ -141,7 +145,7 @@ function MicrosoftSignIn() {
           </Text>
         </View>
         <View style={{ alignItems: 'center', gap: 20 }}>
-          <Text style={{color:colors.gray}}>
+          <Text style={{ color: colors.gray }}>
             Sign in with your Apconic account to get started
           </Text>
           <TouchableOpacity onPress={onMicrosoftButtonPress} style={{ flexDirection: 'row', gap: 15, backgroundColor: colors.BabyBlue, padding: 10, borderRadius: 5 }}>

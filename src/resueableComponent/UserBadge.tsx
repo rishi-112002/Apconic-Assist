@@ -4,9 +4,12 @@ import colors from "../assest/color/colors";
 const UserBadge = ({ userName, status , onPress }: any) => {
     console.log("userName and status in bagdge", status);
     function getInitials(userName: any) {
-        const names = userName.split(" "); 
-        const initials = names.map((name: string) => name.charAt(0).toUpperCase()).join(""); 
-        return initials;
+        if(userName){
+
+            const names = userName.split(" "); 
+            const initials = names.map((name: string) => name.charAt(0).toUpperCase()).join(""); 
+            return initials;
+        }
     }
     return (
         <View style={{ position: "relative" }}>

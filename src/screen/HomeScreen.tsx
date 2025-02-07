@@ -26,7 +26,6 @@ function HomeScreen() {
     (state: RootState) => state.authentication.status,
   );
 
-  // console.log("status", status)
   const makeCall = (number: any) => {
     const url = `tel:${number}`;
     Linking.openURL(url).catch(err => console.error("Failed to open dialer", err));
@@ -106,7 +105,7 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <TopLeftModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <TopLeftModal modalVisible={modalVisible} setModalVisible={setModalVisible} value={status} />
 
       <FlatList
         data={employees}

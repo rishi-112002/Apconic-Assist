@@ -63,10 +63,14 @@ export const CheckUserlogin = createAsyncThunk(
                 status: userStatus,
                 employeeId: UserId
             };
+            console.log ("data  in check user" , detail)
           
             if (userName && userEmail && mobileNo && userStatus && UserId) {
+                console.log("data from action")
+
                 return detail;
             } else {
+                console.log("error")
                 return thunkAPI.rejectWithValue("ERROR");
             }
         } catch (error) {

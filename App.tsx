@@ -5,6 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from "@react-navigation/native"
 import AuthStack from "./src/navigation/HomeNavigation"
 import { store } from "./src/redux/Store";
+import Notification from "./src/functions/Notification";
+
 function App() {
   return (
     <Provider store={store}>
