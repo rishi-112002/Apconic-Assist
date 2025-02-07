@@ -9,11 +9,15 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { useState } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AuthStackScreenName } from '../navigation/HomeNavigation';
+import colors from '../assest/color/colors';
+
 
 interface UserInfo {
   '@odata.context': string;
@@ -34,7 +38,8 @@ function MicrosoftSignIn() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [mobileModalVisible, setMobileModalVisible] = useState(false);
   const [mobileNumber, setMobileNumber] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<AuthStackScreenName>>();
+
 
   const saveUserToFirestore = async (user: UserInfo, mobilePhone: string) => {
     try {
@@ -45,14 +50,14 @@ function MicrosoftSignIn() {
           lastName: user.surname,
           email: user.mail,
           mobilePhone: mobilePhone,
-          createdAt: firestore.FieldValue.serverTimestamp(),
-          status: null,
+          stausUpdatedAt: firestore.FieldValue.serverTimestamp(),
+          status: "Unknown",
         },
-        {merge: true}, // Ensures mobile number is updated if already exists
+        { merge: true }, // Ensures mobile number is updated if already exists
       );
 
-      console.log('User saved to Firestore:', user.displayName);
-      navigation.replace('HomeScreen'); // Navigate immediately
+      // console.log('User saved to Firestore:', user.displayName);
+      navigation.navigate('HomeScreen'); // Navigate immediately
     } catch (error) {
       console.error('Error saving user to Firestore:', error);
       Alert.alert('Error', 'Failed to save user data.');
@@ -70,8 +75,8 @@ function MicrosoftSignIn() {
           const existingUser = docSnapshot.data();
 
           if (existingUser?.mobilePhone) {
-            console.log('User found, navigating immediately...');
-            navigation.replace('HomeScreen'); // 🚀 Navigate instantly!
+            // console.log('User found, navigating immediately...');
+            navigation.navigate('HomeScreen'); // 🚀 Navigate instantly!
           } else {
             setUserInfo(user);
             setMobileModalVisible(true); // Show mobile number modal
@@ -120,51 +125,59 @@ function MicrosoftSignIn() {
   };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Button title="Microsoft Sign-In" onPress={onMicrosoftButtonPress} />
+    <View style={{ flex: 1, alignItems: 'center', backgroundColor: colors.white }}>
+      <View style={{ flex: 1, alignItems: 'center', gap: 100 }}>
+        <View style={{ alignItems: 'center' }}>
 
-      {/* {userInfo && (
-        <View style={{marginTop: 20, alignItems: 'center'}}>
-          <Text style={{color: 'black'}}>Name: {userInfo.displayName}</Text>
-          <Text>Unique ID: {userInfo.id}</Text>
-          <Text>Email: {userInfo.mail}</Text>
-          <Text>Mobile Phone: {userInfo.mobilePhone ?? 'Not Available'}</Text>
-          <Text>Job Title: {userInfo.jobTitle ?? 'Not Available'}</Text>
-          <Text>Office Location: {userInfo.officeLocation ?? 'Not Available'}</Text>
+          <Image source={require("../assest/icons/apconicLogo.png")} style={{ width: 200, height: 200, resizeMode: 'center' }} />
+          <Image source={require("../assest/icons/apconicHubLogo.png")} style={{ width: 200, height: 200, resizeMode: 'center' }} />
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.greenBase, marginVertical: 10 }}>
+            Simplify Your Status
+          </Text>
+          <Text style={{
+            fontSize: 15, fontWeight: 'bold', color: colors.greenBase, marginVertical: 10, textAlign: 'center', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginHorizontal: 50
+          }}>
+            Mark Your Attendance & Stay Updated on Your Team's Status
+          </Text>
         </View>
-      )} */}
-
-      {/* Mobile Number Input Modal */}
-      <Modal transparent visible={mobileModalVisible} animationType="fade">
-        <View style={styles.overlay}>
-          <View style={styles.container}>
-            <Text style={styles.title}>Primary Mobile Number Required</Text>
-            <Text style={styles.message}>
-              Please enter your mobile number to continue.
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter mobile number"
-              keyboardType="phone-pad"
-              maxLength={10}
-              value={mobileNumber}
-              onChangeText={setMobileNumber}
-            />
-            <View style={styles.buttonContainer}>
-              {/* <TouchableOpacity
-                onPress={() => setMobileModalVisible(false)}
-                style={[styles.button, styles.cancelButton]}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity> */}
-              <TouchableOpacity
-                onPress={handleMobileSubmit}
-                style={[styles.button, styles.submitButton]}>
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
+        <View style={{ alignItems: 'center', gap: 20 }}>
+          <Text style={{color:colors.gray}}>
+            Sign in with your Apconic account to get started
+          </Text>
+          <TouchableOpacity onPress={onMicrosoftButtonPress} style={{ flexDirection: 'row', gap: 15, backgroundColor: colors.BabyBlue, padding: 10, borderRadius: 5 }}>
+            <Image source={require("../assest/icons/microsoft.png")} />
+            <Text>Microsoft Sign-In</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {
+        mobileModalVisible &&
+        <Modal transparent visible={mobileModalVisible} animationType="fade">
+          <View style={styles.overlay}>
+            <View style={styles.container}>
+              <Text style={styles.title}>Primary Mobile Number Required</Text>
+              <Text style={styles.message}>
+                Please enter your mobile number to continue.
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter mobile number"
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={mobileNumber}
+                onChangeText={setMobileNumber}
+              />
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  onPress={handleMobileSubmit}
+                  style={[styles.button, styles.submitButton]}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      }
     </View>
   );
 }
