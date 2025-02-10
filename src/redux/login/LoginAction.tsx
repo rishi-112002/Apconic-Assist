@@ -63,8 +63,8 @@ export const CheckUserlogin = createAsyncThunk(
                 status: userStatus,
                 employeeId: UserId
             };
-            console.log ("data  in check user" , detail)
-          
+            console.log("data  in check user", detail)
+
             if (userName && userEmail && mobileNo && userStatus && UserId) {
                 console.log("data from action")
 
@@ -78,3 +78,15 @@ export const CheckUserlogin = createAsyncThunk(
         }
     },
 );
+export const LogOutUser = createAsyncThunk("Logout_user", async (_, thunkAPI) => {
+    try {
+        await AsyncStorage.removeItem("name");
+        await AsyncStorage.removeItem("email")
+        await AsyncStorage.removeItem("mobileNo")
+        await AsyncStorage.removeItem("status")
+        await AsyncStorage.removeItem("employeeId");
+    }
+    catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+})

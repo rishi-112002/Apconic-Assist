@@ -5,6 +5,7 @@ import firestore from "@react-native-firebase/firestore";
 import { useSelector } from 'react-redux';
 import { RootState, store } from '../redux/Store';
 import { changeStatus } from '../redux/login/LoginReducer';
+import colors from '../assest/color/colors';
 
 const statusOptions = [
     { label: 'Present', value: 'Present' },
@@ -15,9 +16,6 @@ const statusOptions = [
 
 function DropdownComponent(props: { value: any, isFocus: any, setIsFocus: any }) {
     const { value, isFocus, setIsFocus } = props;
-      const userEmail = useSelector(
-        (state: RootState) => state.authentication.userEmail,
-      );
       const employeeId = useSelector(
         (state: RootState) => state.authentication.employeeId,
       );
@@ -37,17 +35,20 @@ function DropdownComponent(props: { value: any, isFocus: any, setIsFocus: any })
         }
     };
     const dispatch = store.dispatch;
-    // console.log('employeeId in drop down', employeeId, email);
     const updateStatus = async (newStatus: any) => {
         try {
-            await firestore().collection("employees").doc(employeeId).update({
-                status: newStatus,
-                stausUpdatedAt: firestore.FieldValue.serverTimestamp(),
-            });
-            await firestore().collection("employees").doc(employeeId).collection("statusLog").add({
-                status: newStatus,
-                updatedAt: firestore.FieldValue.serverTimestamp(),
-            })
+            if (employeeId) {
+                await firestore().collection("employees").doc(employeeId).update({
+                    status: newStatus,
+                    stausUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                });
+                await firestore().collection("employees").doc(employeeId).collection("statusLog").add({
+                    status: newStatus,
+                    updatedAt: firestore.FieldValue.serverTimestamp(),
+                });
+            } else {
+                console.error("Error: employeeId is null or undefined");
+            }
             dispatch(changeStatus(newStatus));
         } catch (error) {
             console.error("Error updating status:", error);
@@ -91,8 +92,7 @@ export default DropdownComponent;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        padding: 2,
+        backgroundColor: colors.white,
     },
     dropdown: {
         borderColor: 'white',

@@ -13,24 +13,19 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootState, store } from '../redux/Store';
 import { AuthStackScreenName } from '../navigation/HomeNavigation';
 import { CheckUserlogin } from '../redux/login/LoginAction';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 function SplashEffect() {
     const userName = useSelector(
         (state: RootState) => state.authentication.name,
     );
-    const name = AsyncStorage.getItem("name");
-    console.log("name", name)
     const userEmail = useSelector(
         (state: RootState) => state.authentication.userEmail,
     );
     const initializeApp = async () => {
-        console.log("hello")
         store.dispatch(CheckUserlogin()); // Dispatch action to check user login
     };
     useEffect(() => {
         initializeApp();
     }, [initializeApp]);
-    // console.log("userName", userName);
     const [isFirstLaunch, setIsFirstLaunch] = useState(true);
     const ring1Scale = useSharedValue(0);
     const ring2Scale = useSharedValue(0);
@@ -58,7 +53,6 @@ function SplashEffect() {
             // Handle navigation logic and connectivity
             const splashTimeout = setTimeout(async () => {
                 if (userEmail) {
-                    // console.log("userEmail in splash ", userEmail , userName);
                     navigation.navigate('HomeScreen');
                 }
                 else {

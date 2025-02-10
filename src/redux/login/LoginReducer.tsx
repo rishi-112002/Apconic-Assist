@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CheckUserlogin, loginUser } from "./LoginAction";
+import { CheckUserlogin, loginUser, LogOutUser } from "./LoginAction";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState: {
     userEmail: string | null,
@@ -23,15 +24,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        logoutUser: (state) => {
-            state.userEmail = null;
-            state.name = null;
-            state.mobileNo = null;
-            state.status = null;
-            state.loading = false;
-            state.error = null;
-        },
-        changeStatus: (state, action ) => {
+        changeStatus: (state, action) => {
             // console.log("status in reducer", action.payload);
             state.status = action.payload;
         }
@@ -62,9 +55,16 @@ const authSlice = createSlice({
                 state.employeeId = action.payload.employeeId;
             }).addCase(CheckUserlogin.rejected, (state, action) => {
                 state.error = action.payload as string | null;
-            });
+            }).addCase(LogOutUser.fulfilled, (state) => {
+                state.userEmail = null;
+                state.name = null;
+                state.mobileNo = null;
+                state.status = null;
+                state.loading = false;
+                state.error = null;
+            })
     },
 });
 
-export const { logoutUser  , changeStatus} = authSlice.actions;
+export const {  changeStatus } = authSlice.actions;
 export default authSlice;
