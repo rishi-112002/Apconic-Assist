@@ -1,27 +1,42 @@
-import {createStackNavigator} from '@react-navigation/stack';
-import MicrosoftSignIn from '../screen/microsoftAuth';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from '../screen/LoginScreen';
 import HomeScreen from '../screen/HomeScreen';
+import SplashScreen from '../screen/SplashScreen';
 
-type AuthStackScreenName = {
+export type AuthStackScreenName = {
   HomeScreen: undefined; // Ensuring HomeScreen gets userInfo
   LoginScreen: undefined;
+  SplashScreen: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackScreenName>();
 
 function AuthStack() {
   return (
-    <Stack.Navigator initialRouteName="LoginScreen">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
-        name="LoginScreen"
-        component={MicrosoftSignIn}
-        // options={{ headerShown: false }}
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{ headerShown: false }}
       />
+
+
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        // options={{ headerShown: false }}
+        options={{
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+        }} />
+
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
       />
+
     </Stack.Navigator>
   );
 }
