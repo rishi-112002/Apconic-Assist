@@ -1,57 +1,60 @@
-import React from "react";
-import { Text, View, ActivityIndicator, FlatList, StyleSheet, Image, TouchableOpacity } from "react-native";
-import colors from "../assest/color/colors";
+import React, { useState } from "react";
+import { View, ActivityIndicator, FlatList } from "react-native";
 import TopLeftModal from "../resueableComponent/Modal";
 import HomeScreenEffect from "../functions/HomeScreenEffeects";
 import { STYLES } from "../styles/ScreenStyles";
-import StringConstants from "../assest/constants/StringsConstants";
+import UserList from "../resueableComponent/userList";
+import CustomDateTimePicker from "../resueableComponent/CustomCalendar";
+import { store } from "../redux/Store";
+import { updateStatus } from "../redux/login/LoginAction";
 
 function HomeScreen() {
-  const { employees, loading, makeCall, modalVisible, setModalVisible, status } = HomeScreenEffect();
-  const {ON_LEAVE,ON_LEAVE_FROM,OUTSIDE,OUTSIDE_FROM,PRESENT,STATUS_UPDATED_AT,UNKNOWN} = StringConstants();
+  const [isCalendarVisible, setCalendarVisible] = useState(false);
+  const { employees, loading, makeCall, userId, modalVisible, setModalVisible, status } = HomeScreenEffect();
+  const closeCalendarModal = () => setCalendarVisible(false);
+  const [tovalue, setToValue] = useState<string>('');
+  const [fromValue, setFromValue] = useState<string>('');
+
+  console.log("fromValue", fromValue)
+  console.log("tovalue", tovalue)
+
+  console.log("status in homeScreen ", status)
+  const handleDateSelect = (formattedDate: string, dateValue: any, type: 'from' | 'to') => {
+    // console.log(`Selected ${type} date:`, dateValue, formattedDate);
+    console.log("formated date in handleDate selecte", formattedDate)
+    console.log("date value in handleDate selecte", dateValue)
+
+    if (type === 'from') {
+      setFromValue(formattedDate); // Update "From" date
+    } else {
+      setToValue(formattedDate); // Update "To" date
+      store.dispatch(updateStatus({
+        status: status ?? '',
+        employeeId: userId,
+        newStatus: "On-leave",
+        tovalue: formattedDate,
+        FromValue: fromValue
+      }));
+      closeCalendarModal(); // Close modal after selecting "To" date
+    }
+  };
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
   return (
     <View style={STYLES.container}>
-      <TopLeftModal modalVisible={modalVisible} setModalVisible={setModalVisible} value={status} />
-
+      {/* <LeaveModal visible={modalVisible} onClose={closeCalendarModal} employeeId={} /> */}
+      <TopLeftModal modalVisible={modalVisible} setModalVisible={setModalVisible} value={status} setCalendarVisible={setCalendarVisible} tovalue={tovalue} FromValue={fromValue} />
+      <CustomDateTimePicker
+        visible={isCalendarVisible}
+        onClose={closeCalendarModal}
+        onDateSelect={handleDateSelect}
+      />
       <FlatList
         data={employees}
         keyExtractor={(item) => item.id}
         renderItem={({ item }: any) => (
-          <View style={STYLES.card}>
-            <View style={STYLES.cardContent}>
-              <View style={[STYLES.statusContainer, {
-                backgroundColor: item.status === PRESENT ? colors.greenDarkest : item.status === ON_LEAVE ? colors.redSoftner : "orange"
-              }]}
-              >
-                <Text style={[STYLES.value, {
-                  color: item.status !== UNKNOWN ? colors.white : colors.gray,
-                  fontSize: 12
-                }]}>
-                  {item.status}
-                </Text>
-              </View>
-              <Text style={STYLES.title}>{item.firstName} {item.lastName}</Text>
-              <View style={STYLES.infoContainer}>
-                <View>
-                  <Text style={STYLES.value}>{item.email}</Text>
-                  {item.status !== PRESENT && (
-                    <Text style={STYLES.label}>
-                      {item.status === ON_LEAVE ? ON_LEAVE_FROM : item.status === OUTSIDE ? OUTSIDE_FROM : STATUS_UPDATED_AT}:
-                      <Text style={STYLES.value}>{new Date(item?.stausUpdatedAt?.toDate()).toLocaleString()}</Text>
-                    </Text>
-                  )}
-                </View>
-              </View>
-            </View>
-            <View style={STYLES.callButtonContainer}>
-              <TouchableOpacity onPress={() => makeCall(item.mobilePhone)} style={STYLES.callButton}>
-                <Image source={require("../assest/icons/phone_icon_white.png")} style={STYLES.callIcon} />
-              </TouchableOpacity>
-            </View>
-          </View>
+          <UserList item={item} makeCall={makeCall} />
         )}
       />
     </View>
