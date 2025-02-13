@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
 import DropdownComponent from "./CustomDropDown";
 import colors from "../assest/color/colors";
 import { store } from "../redux/Store";
 import { LogOutUser } from "../redux/login/LoginAction";
 
-const TopLeftModal = (props: { modalVisible: any, setModalVisible: any, value: any  }) => {
-    const [isFocus, setIsFocus,] = useState(false);
-    const { modalVisible, setModalVisible, value } = props;
+const TopLeftModal = (props: { setCalendarVisible: any, modalVisible: any, setModalVisible: any, value: any, tovalue: any, FromValue: any }) => {
+    const [isFocus, setIsFocus] = useState(false);
+    const { modalVisible, setModalVisible, value, setCalendarVisible, tovalue, FromValue } = props;
     const handleLogout = () => {
         store.dispatch(LogOutUser());
         setModalVisible(false);
     };
-
     return (
         <View >
 
@@ -22,10 +20,12 @@ const TopLeftModal = (props: { modalVisible: any, setModalVisible: any, value: a
                     <View style={styles.modalView}>
                         {/* Logout Option */}
                         <DropdownComponent
+                            setCalendarVisible={setCalendarVisible}
                             value={value}
                             isFocus={isFocus}
                             setIsFocus={setIsFocus}
-                        />
+                            tovalue={tovalue}
+                            FromValue={FromValue} />
                         <TouchableOpacity onPress={handleLogout} style={styles.option}>
                             <Text style={styles.optionText}>Logout</Text>
                         </TouchableOpacity>
@@ -59,9 +59,7 @@ const styles = StyleSheet.create({
 
     },
     option: {
-        padding: 2,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ddd",
+        paddingHorizontal: 5,
     },
     optionText: {
         fontSize: 12,

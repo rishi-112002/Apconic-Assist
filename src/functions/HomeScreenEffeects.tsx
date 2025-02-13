@@ -3,17 +3,19 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { Linking, Text, TouchableOpacity, Image, View } from "react-native";
 import { useSelector } from "react-redux";
 import colors from "../assest/color/colors";
-import { loginUser } from "../redux/login/LoginAction";
+import { loginUser, updateStatus } from "../redux/login/LoginAction";
 import { RootState, store } from "../redux/Store";
 import UserBadge from "../resueableComponent/UserBadge";
 import { STYLES } from "../styles/ScreenStyles";
 import firestore from "@react-native-firebase/firestore";
 import { AuthStackScreenName } from "../navigation/HomeNavigation";
+import StringConstants from "../assest/constants/StringsConstants";
 
 function HomeScreenEffect() {
+    const { ON_LEAVE, PRESENT } = StringConstants();
+
     const [employees, setEmployees] = useState<{ id: string; firstName: string; lastName: string; email: string; mobilePhone: string; stausUpdatedAt: any; }[]>([]);
     const [loading, setLoading] = useState(true);
-    const [isFocus, setIsFocus] = useState(false);
     const navigation = useNavigation<NavigationProp<AuthStackScreenName>>();
 
     const userEmail = useSelector(
@@ -58,7 +60,7 @@ function HomeScreenEffect() {
                 querySnapshot.forEach((doc: any) => {
                     const employeeData = { id: doc.id, ...doc.data() };
                     if (employeeData.email !== userEmail) { // Exclude logged-in user
-                        console.log("employeeData", employeeData);
+                   
                         employeeList.push(employeeData);
                     }
                 });
@@ -66,15 +68,10 @@ function HomeScreenEffect() {
                 setEmployees(employeeList);
                 setLoading(false);
             });
-
-        // console.log("userName", userEmail);
-
         return () => unsubscribe();
     }, [userEmail, status]);
 
     const [modalVisible, setModalVisible] = useState(false);
-
-    // const [statusValue, setStatusValue] = useState();
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: () => (
@@ -82,9 +79,8 @@ function HomeScreenEffect() {
             ),
             headerLeft: () => (
                 <TouchableOpacity
-                    style={{ marginLeft: 15 }}
-                >
-                    <Image source={require("../assest/icons/meu.png")} style={{ width: 25, height: 25 }} />
+                    style={{ marginLeft: 15 }}>
+                    {/* <Image source={require("../assest/icons/meu.png")} style={{ width: 25, height: 25 }} /> */}
                 </TouchableOpacity>
             ),
             headerRight: () => (
@@ -92,9 +88,9 @@ function HomeScreenEffect() {
                     <View style={{
                         justifyContent: 'center', alignItems: 'center',
                         height: 20,
-                        backgroundColor: status === "Present" ? "green" : status === "On-leave" ? "red" : status === "Unknown" ? "white" : "orange", paddingHorizontal: 5, borderRadius: 5
+                        backgroundColor: status === "Present" ? colors.greenSoftneer : status === "On-leave" ? colors.redSoftner : status === "Unknown" ? colors.white : colors.softOrange, paddingHorizontal: 5, borderRadius: 5
                     }}>
-                        <Text style={[STYLES.value, { color: status !== "Unknown" ? colors.white : colors.gray, fontSize: 12 }]}>
+                        <Text style={[STYLES.value, { color: status === PRESENT ? colors.greenDarkest : status === ON_LEAVE ? colors.redDarkest : "orange", }]}>
                             {status}
                         </Text>
                     </View>
@@ -103,13 +99,8 @@ function HomeScreenEffect() {
             ),
         });
     }, [navigation, status]);
+    
     return {
-        modalVisible, setModalVisible,
-        navigation, makeCall,
-        employees, setEmployees,
-        loading, setLoading,
-        isFocus, setIsFocus,
-        status,
-    }
+        employees, loading, makeCall, userId, modalVisible, setModalVisible, status }
 }
 export default HomeScreenEffect;

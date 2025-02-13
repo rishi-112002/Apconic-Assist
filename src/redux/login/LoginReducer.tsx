@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CheckUserlogin, loginUser, LogOutUser } from "./LoginAction";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { CheckUserlogin, loginUser, LogOutUser, updateStatus } from "./LoginAction";
 const initialState: {
     userEmail: string | null,
     name: string | null,
     mobileNo: string | null,
-    status: string | null,
+    status: string | null | undefined,
     loading: boolean,
     error: string | null,
     employeeId: string | null,
+    currentStatusId: string | null,
+    From: any,
+    To: any
 } = {
     userEmail: null,
     name: null,
@@ -18,6 +19,10 @@ const initialState: {
     loading: false,
     error: null,
     employeeId: null,
+    currentStatusId: null,
+    From: null,
+    To: null,
+
 };
 
 const authSlice = createSlice({
@@ -25,7 +30,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         changeStatus: (state, action) => {
-            // console.log("status in reducer", action.payload);
             state.status = action.payload;
         }
     },
@@ -62,9 +66,14 @@ const authSlice = createSlice({
                 state.status = null;
                 state.loading = false;
                 state.error = null;
+            }).addCase(updateStatus.fulfilled, (State, action) => {
+                State.status = action.payload?.newStatus;
+                State.currentStatusId = action.payload?.docId ?? null
+                State.From = action.payload?.From?.toString() ?? null
+                State.To = action.payload?.To ?? null
             })
     },
 });
 
-export const {  changeStatus } = authSlice.actions;
+export const { changeStatus } = authSlice.actions;
 export default authSlice;

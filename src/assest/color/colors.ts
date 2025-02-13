@@ -13,6 +13,7 @@ const colors = {
     skyLightest: '#F7F9FA',
     white: '#FFFFFF',
     offWhite:"#FAF9F6",
+    softOrange:"#FFEDD5",
 
     primaryDark: '#5538EE',
     primaryBase: '#6B4EFF',

@@ -2,7 +2,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import colors from "../assest/color/colors";
 
 const UserBadge = ({ userName, status , onPress }: any) => {
-    console.log("userName and status in bagdge", status);
     function getInitials(userName: any) {
         if(userName){
 

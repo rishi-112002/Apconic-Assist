@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import firestore from "@react-native-firebase/firestore";
 import { useSelector } from 'react-redux';
 import { RootState, store } from '../redux/Store';
-import { changeStatus } from '../redux/login/LoginReducer';
 import colors from '../assest/color/colors';
+import { updateStatus } from '../redux/login/LoginAction';
 
 const statusOptions = [
     { label: 'Present', value: 'Present' },
@@ -14,44 +13,23 @@ const statusOptions = [
     { label: 'Unknown', value: 'Unknown' },
 ];
 
-function DropdownComponent(props: { value: any, isFocus: any, setIsFocus: any }) {
-    const { value, isFocus, setIsFocus } = props;
-      const employeeId = useSelector(
+function DropdownComponent(props: { setCalendarVisible: any, value: any, isFocus: any, setIsFocus: any, tovalue: any, FromValue: any }) {
+    const { value, isFocus, setIsFocus, setCalendarVisible, tovalue, FromValue } = props;
+    const employeeId = useSelector(
         (state: RootState) => state.authentication.employeeId,
-      );
-    // console.log('employeeId in drop down', value);
+    );
     const getStatusStyle = (status: string) => {
         switch (status) {
             case 'Present':
-                return { backgroundColor: 'green', color: 'white' };
+                return { backgroundColor: colors.greenSoftneer, color: colors.greenDarkest };
             case 'Outside':
-                return { backgroundColor: 'orange', color: 'white' };
+                return { backgroundColor: colors.softOrange, color: "orange" };
             case 'On-leave':
-                return { backgroundColor: 'red', color: 'white' };
+                return { backgroundColor: colors.redSoftner, color: colors.redDarkest };
             case 'Unknown':
                 return { backgroundColor: 'white', color: 'gray' };
             default:
                 return {};
-        }
-    };
-    const dispatch = store.dispatch;
-    const updateStatus = async (newStatus: any) => {
-        try {
-            if (employeeId) {
-                await firestore().collection("employees").doc(employeeId).update({
-                    status: newStatus,
-                    stausUpdatedAt: firestore.FieldValue.serverTimestamp(),
-                });
-                await firestore().collection("employees").doc(employeeId).collection("statusLog").add({
-                    status: newStatus,
-                    updatedAt: firestore.FieldValue.serverTimestamp(),
-                });
-            } else {
-                console.error("Error: employeeId is null or undefined");
-            }
-            dispatch(changeStatus(newStatus));
-        } catch (error) {
-            console.error("Error updating status:", error);
         }
     };
     return (
@@ -78,10 +56,15 @@ function DropdownComponent(props: { value: any, isFocus: any, setIsFocus: any })
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={(item) => {
-                    updateStatus(item.value);
-                    setIsFocus(false);
-                }}
-
+                    if (item.value !== "On-leave") {
+                        store.dispatch(updateStatus({ status: value, employeeId: employeeId, newStatus: item.value, tovalue: "", FromValue: "" }));
+                    }
+                    else{
+                        
+                        setCalendarVisible(true) 
+                }
+            }
+        }
             />
         </View>
     );

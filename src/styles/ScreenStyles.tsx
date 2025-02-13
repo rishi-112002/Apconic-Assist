@@ -2,11 +2,11 @@ import { StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import colors from "../assest/color/colors";
 export const STYLES = StyleSheet.create({
-    Splash_ringContainer: {
+  Splash_ringContainer: {
     backgroundColor: colors.offWhite,
     borderRadius: 999,
     padding: hp(5),
-    elevation:5
+    elevation: 5
   },
   Splash_logo: {
     width: hp(25),
@@ -33,7 +33,11 @@ export const STYLES = StyleSheet.create({
   card: {
     padding: 20,
     borderRadius: 10,
-    backgroundColor: colors.offWhite,
+    borderBottomColor: colors.lightGray,
+    borderWidth: 1,
+    borderRightColor: colors.white,
+    borderLeftColor: colors.white,
+    borderTopColor: colors.white,
     shadowColor: "#fff",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -43,11 +47,60 @@ export const STYLES = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContainer: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 10, // Android shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  modalContent: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 14,
+    color: colors.gray,
+    marginBottom: 20,
+    textAlign: 'center',
+  },  
+  calendarModalContainer: {
+    flex: 1,
+    padding: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.darkerTransparent,  // Darker transparent background
+},
+CalendarContainer: {
+  padding: 20,
+  backgroundColor: colors.BabyBlue,
+  borderRadius: 10,
+  borderWidth: 1,
+  borderColor: colors.gray,
+  color:colors.PrimaryTextColor
+},
   cardContent: {
     flex: 9,
   },
   statusContainer: {
-    width: "25%",
+    width: "20%",
+    paddingVertical: 3,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 5,
@@ -145,7 +198,7 @@ export const STYLES = StyleSheet.create({
     backgroundColor: '#007bff',
   },
   buttonText: {
-    color:colors.white,
+    color: colors.white,
     fontWeight: 'bold',
   },
 });

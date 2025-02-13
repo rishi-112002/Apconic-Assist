@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import StringConstants from "../../assest/constants/StringsConstants";
+const { ON_LEAVE, OUTSIDE, EMAIL, NAME, EMPLOYEES, MOBILE_NO, STATUS,  EMPLOYEE_ID, UNKNOWN, STATUSLOG } = StringConstants();
 export const loginUser = createAsyncThunk(
     "Login User",
     async (
@@ -12,10 +13,11 @@ export const loginUser = createAsyncThunk(
     ) => {
         const { userEmail } = params;
 
+
         try {
             const userQuerySnapshot = await firestore()
-                .collection("employees")
-                .where("email", "==", userEmail)
+                .collection(EMPLOYEES)
+                .where(EMAIL, "==", userEmail)
                 .get();
 
             const employeeDoc = userQuerySnapshot.docs[0];
@@ -27,20 +29,20 @@ export const loginUser = createAsyncThunk(
 
             const userDoc = userQuerySnapshot.docs[0];
             const userData = userDoc.data();
-            // console.log("id", employeeId)
+
             const userDetails = {
                 userEmail: userData.email || "",
                 name: `${userData.firstName} ${userData.lastName}`,
                 mobileNo: userData.mobilePhone || "",
-                status: userData.status || "Unknown",
+                status: userData.status || UNKNOWN,
                 employeeId: employeeId || "",
             };
-            await AsyncStorage.setItem("name", userDetails.name);
-            await AsyncStorage.setItem("email", userDetails.userEmail)
-            await AsyncStorage.setItem("mobileNo", userDetails.mobileNo)
-            await AsyncStorage.setItem("status", userDetails.status)
-            await AsyncStorage.setItem("employeeId", employeeId);
-            console.log("run of login Action")
+            await AsyncStorage.setItem(NAME, userDetails.name);
+            await AsyncStorage.setItem(EMAIL, userDetails.userEmail)
+            await AsyncStorage.setItem(MOBILE_NO, userDetails.mobileNo)
+            await AsyncStorage.setItem(STATUS, userDetails.status)
+            await AsyncStorage.setItem(EMPLOYEE_ID, employeeId);
+
             return userDetails;
         } catch (err) {
             return rejectWithValue("LOGIN_ERROR_SOMETHING_WRONG");
@@ -51,11 +53,11 @@ export const CheckUserlogin = createAsyncThunk(
     "USER_LOGIN_STATUS",
     async (_, thunkAPI) => {
         try {
-            const userName = await AsyncStorage.getItem("name");
-            const userEmail = await AsyncStorage.getItem("email")
-            const mobileNo = await AsyncStorage.getItem("mobileNo")
-            const userStatus = await AsyncStorage.getItem("status")
-            const UserId = await AsyncStorage.getItem("employeeId");
+            const userName = await AsyncStorage.getItem(NAME);
+            const userEmail = await AsyncStorage.getItem(EMAIL)
+            const mobileNo = await AsyncStorage.getItem(MOBILE_NO)
+            const userStatus = await AsyncStorage.getItem(STATUS)
+            const UserId = await AsyncStorage.getItem(EMPLOYEE_ID);
             const detail = {
                 name: userName,
                 email: userEmail,
@@ -63,14 +65,10 @@ export const CheckUserlogin = createAsyncThunk(
                 status: userStatus,
                 employeeId: UserId
             };
-            console.log("data  in check user", detail)
-
             if (userName && userEmail && mobileNo && userStatus && UserId) {
-                console.log("data from action")
-
                 return detail;
             } else {
-                console.log("error")
+              
                 return thunkAPI.rejectWithValue("ERROR");
             }
         } catch (error) {
@@ -80,13 +78,115 @@ export const CheckUserlogin = createAsyncThunk(
 );
 export const LogOutUser = createAsyncThunk("Logout_user", async (_, thunkAPI) => {
     try {
-        await AsyncStorage.removeItem("name");
-        await AsyncStorage.removeItem("email")
-        await AsyncStorage.removeItem("mobileNo")
-        await AsyncStorage.removeItem("status")
-        await AsyncStorage.removeItem("employeeId");
+        await AsyncStorage.removeItem(NAME);
+        await AsyncStorage.removeItem(EMAIL)
+        await AsyncStorage.removeItem(MOBILE_NO)
+        await AsyncStorage.removeItem(STATUS)
+        await AsyncStorage.removeItem(EMPLOYEE_ID);
     }
     catch (error) {
         return thunkAPI.rejectWithValue(error);
     }
 })
+
+export const updateStatus = createAsyncThunk(
+    "updateStatus",
+    async (params: { status: string; newStatus: string; employeeId: string | null; tovalue: string, FromValue: string }) => {
+        const { employeeId, newStatus, tovalue, FromValue, status } = params;
+
+
+
+        try {
+            if (!employeeId) {
+                return null;
+            }
+
+            // Update employee's main status
+
+
+            let docId = null;
+            let From = null;
+            let To = null;
+
+            const statusLogRef = firestore()
+                .collection(EMPLOYEES)
+                .doc(employeeId)
+                .collection(STATUSLOG);
+
+            // Handle ON_LEAVE or OUTSIDE case (log new status)
+            if (newStatus === OUTSIDE) {
+                const docRef = await statusLogRef.add({
+                    status: newStatus,
+                    From: firestore.FieldValue.serverTimestamp(),
+                    To: "",
+                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                });
+
+                docId = docRef.id;
+                From = firestore.FieldValue.serverTimestamp();
+                To = "";
+            }
+            else if (newStatus === ON_LEAVE) {
+
+                const docRef = await statusLogRef.add({
+                    status: newStatus,
+                    From: FromValue ? FromValue : '',
+                    To: tovalue ? tovalue : "",
+                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                });
+
+                docId = docRef.id;
+                From = FromValue ? FromValue : '';
+                To = tovalue ? tovalue : "";
+            }
+            else {
+                const docRef = await statusLogRef.add({
+                    status: newStatus,
+                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                });
+
+                docId = docRef.id;
+                From = null;
+                To = null;
+
+            }
+
+            // If the previous status was OUTSIDE and is changing, update the last OUTSIDE record
+            if (status === OUTSIDE && newStatus !== status) {
+                const querySnapshot = await statusLogRef
+                    .where(STATUS, "==", OUTSIDE)
+                    .limit(1)
+                    .get();
+
+
+
+                if (!querySnapshot.empty) {
+                    const lastOutsideDoc = querySnapshot.docs[0];
+
+                    await statusLogRef.doc(lastOutsideDoc.id).update({
+                        To: firestore.FieldValue.serverTimestamp(),
+                    });
+
+                   
+                }
+            }
+            await firestore().collection(EMPLOYEES).doc(employeeId).update({
+                status: newStatus,
+                statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                From: From,
+                To: To
+            });
+
+            // Log general status update
+
+            return {
+                newStatus,
+                From, To,
+                docId,
+            };
+        } catch (error) {
+
+            throw error;
+        }
+    }
+);
