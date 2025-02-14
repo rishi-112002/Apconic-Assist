@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import colors from "../assest/color/colors";
+import {StyleSheet} from 'react-native';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import colors from '../assest/color/colors';
 export const STYLES = StyleSheet.create({
   Splash_ringContainer: {
     backgroundColor: colors.offWhite,
     borderRadius: 999,
     padding: hp(5),
-    elevation: 5
+    elevation: 5,
   },
   Splash_logo: {
     width: hp(25),
@@ -21,9 +21,9 @@ export const STYLES = StyleSheet.create({
     backgroundColor: '#F0EFEA ',
   },
   value: {
-    fontWeight: "400",
+    fontWeight: '400',
     fontSize: 14,
-    color: colors.PrimaryTextColor
+    color: colors.PrimaryTextColor,
   },
   container: {
     flex: 1,
@@ -38,8 +38,8 @@ export const STYLES = StyleSheet.create({
     borderRightColor: colors.white,
     borderLeftColor: colors.white,
     borderTopColor: colors.white,
-    shadowColor: "#fff",
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#fff',
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
@@ -54,16 +54,18 @@ export const STYLES = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modalContainer: {
-    width: '90%',
+    flex: 1,
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    elevation: 10, // Android shadow
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    // justifyContent: 'center',
+    // elevation: 10, // Android shadow
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 2},
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
   },
   modalContent: {
     width: '100%',
@@ -79,27 +81,27 @@ export const STYLES = StyleSheet.create({
     color: colors.gray,
     marginBottom: 20,
     textAlign: 'center',
-  },  
+  },
   calendarModalContainer: {
     flex: 1,
     padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.darkerTransparent,  // Darker transparent background
-},
-CalendarContainer: {
-  padding: 20,
-  backgroundColor: colors.BabyBlue,
-  borderRadius: 10,
-  borderWidth: 1,
-  borderColor: colors.gray,
-  color:colors.PrimaryTextColor
-},
+    backgroundColor: colors.darkerTransparent, // Darker transparent background
+  },
+  CalendarContainer: {
+    padding: 20,
+    backgroundColor: colors.BabyBlue,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    color: colors.PrimaryTextColor,
+  },
   cardContent: {
     flex: 9,
   },
   statusContainer: {
-    width: "20%",
+    width: '20%',
     paddingVertical: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -108,7 +110,7 @@ CalendarContainer: {
   },
   title: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
     marginVertical: 5,
     color: colors.PrimaryTextColor,
   },
@@ -118,7 +120,7 @@ CalendarContainer: {
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   callButtonContainer: {
     flex: 1,
@@ -139,18 +141,37 @@ CalendarContainer: {
     resizeMode: 'center',
     tintColor: colors.greenDarkest,
   },
-  mainContainer: { flex: 1, alignItems: 'center', backgroundColor: colors.white },
+  mainContainer: {flex: 1, alignItems: 'center', backgroundColor: colors.white},
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  Logo: { width: 200, height: 200, resizeMode: 'center' },
-  markAttendanceText: {
-    fontSize: 15, fontWeight: 'bold', color: colors.greenBase, marginVertical: 10, textAlign: 'center', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginHorizontal: 50
+  Logo: {width: 200, height: 200, resizeMode: 'center'},
+  ContactLogo: {
+    width: 100,
+    height: 100,
+    resizeMode: 'center',
+    marginTop: -30,
   },
-  simplifyStatusText: { fontSize: 20, fontWeight: 'bold', color: colors.greenBase, marginVertical: 10 },
+  markAttendanceText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: colors.greenBase,
+    marginVertical: 10,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginHorizontal: 50,
+  },
+  simplifyStatusText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.greenBase,
+    marginVertical: 10,
+  },
   loginContainer: {
     width: '85%',
     padding: 20,
@@ -158,8 +179,7 @@ CalendarContainer: {
     borderRadius: 10,
     alignItems: 'center',
   },
-  subContainer: { flex: 1, alignItems: 'center' }
-  ,
+  subContainer: {flex: 1, alignItems: 'center'},
   loginTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -170,9 +190,15 @@ CalendarContainer: {
     textAlign: 'center',
     marginBottom: 15,
   },
-  microsoftButton:
-    { flexDirection: 'row', gap: 15, backgroundColor: colors.BabyBlue, padding: 10, borderRadius: 5 },
+  microsoftButton: {
+    flexDirection: 'row',
+    gap: 15,
+    backgroundColor: colors.BabyBlue,
+    padding: 10,
+    borderRadius: 5,
+  },
   input: {
+    // flex: 1,
     width: '100%',
     padding: 10,
     borderWidth: 1,
@@ -192,6 +218,7 @@ CalendarContainer: {
     alignItems: 'center',
     borderRadius: 5,
     marginHorizontal: 5,
+    backgroundColor: 'black',
   },
 
   submitButton: {
