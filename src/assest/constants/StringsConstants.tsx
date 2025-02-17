@@ -15,9 +15,9 @@ function StringConstants() {
   const STATUS = 'status';
   const LASTOUTSIDEDOC = 'lastOutsideDoc';
   const EMPLOYEE_ID = 'employeeId';
-  const MICROSOFT_SIGNIN = 'Microsoft Sign-In';
+  const MICROSOFT_SIGNIN = 'Sign in';
   const MARK_YOUR_ATTENDANCE =
-    "  Mark Your Attendance & Stay Updated on Your Team's Status";
+    "  Mark your attendance & stay updated on your team's status";
   const SIGN_IN_WITH_APCONIC_ACCOUNT =
     ' Sign in with your Apconic account to get started';
   const MobileNumberText = 'Primary Mobile Number';

@@ -54,12 +54,11 @@ export const STYLES = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modalContainer: {
-    flex: 1,
-    width: '100%',
+    width:"100%",
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   modalContent: {
     width: '100%',
@@ -203,11 +202,12 @@ export const STYLES = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainer: {
+    width:"100%",
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   button: {
-    // flex: 1,
+    flex: 1,
     padding: 10,
     alignItems: 'center',
     borderRadius: 5,

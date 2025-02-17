@@ -21,13 +21,13 @@ function UserList(props: { item: any, makeCall: any }) {
                 <View style={STYLES.infoContainer}>
                     <View>
                         <Text style={STYLES.value}>{item.email}</Text>
-                        {item.status !== PRESENT && (
+                        {item.status !== PRESENT && item.From !==null  &&(  
                             <Text style={STYLES.label}>
                                 {item.status === ON_LEAVE ? ON_LEAVE_FROM : item.status === OUTSIDE ? OUTSIDE_FROM : STATUS_UPDATED_AT}:
                                 <Text style={STYLES.value}>   {item.From.split(' at ')[0]}</Text>
                             </Text>
                         )}
-                        {item.To !== null && (
+                        {item.status == ON_LEAVE && (
                             <Text style={STYLES.label}>
                                 On Leave To :
                                 <Text style={STYLES.value}>   {item.To.split(' at ')[0]}</Text>
