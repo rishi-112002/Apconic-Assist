@@ -8,13 +8,13 @@ import {UserInfo} from '../assest/constants/InterfaceConstants';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
- 
+
 function LoginScreenEffect() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [mobileModalVisible, setMobileModalVisible] = useState(false);
   const [mobileNumber, setMobileNumber] = useState('');
   const navigation = useNavigation<NavigationProp<AuthStackScreenName>>();
- 
+
   // Fetch and store FCM Token
   const getFCMToken = async (userId: string) => {
     try {
@@ -29,19 +29,20 @@ function LoginScreenEffect() {
       console.error('Error getting FCM token:', error);
     }
   };
- 
+
   // Save user to Firestore and navigate to HomeScreen
   const saveUserToFirestore = async (user: UserInfo, mobilePhone: string) => {
+    console.log('saveUserToFirestore User :- ', user);
     try {
       const currentUser = auth().currentUser;
       if (!currentUser) {
         Alert.alert('Error', 'User authentication failed.');
         return;
       }
- 
+
       const userRef = firestore().collection('employees').doc(user.id);
       await getFCMToken(user.id);
- 
+
       await userRef.set(
         {
           firstName: user.givenName,
@@ -54,7 +55,6 @@ function LoginScreenEffect() {
         },
         {merge: true},
       );
-      setMobileModalVisible(false);
       if (user.mail) {
         await store.dispatch(loginUser({userEmail: user.mail}));
       } else {
@@ -67,32 +67,60 @@ function LoginScreenEffect() {
       Alert.alert('Error', 'Failed to save user data.');
     }
   };
- 
+
   // Check if user exists in Firestore
+  // const checkUserInFirestore = async (user: UserInfo) => {
+  //   try {
+  //     const userRef = firestore().collection('employees').doc(user.id);
+  //     const docSnapshot = await userRef.get();
+
+  //     if (docSnapshot.exists) {
+  //       const existingUser = docSnapshot.data();
+  //       if (existingUser?.mobilePhone) {
+  //         await store.dispatch(loginUser({userEmail: existingUser.email}));
+  //         navigation.navigate('HomeScreen');
+  //       } else {
+  //         setUserInfo(user);
+  //         console.log('Inner User ;-', user);
+  //         navigation.navigate('Mobile_Number');
+  //         // setMobileModalVisible(true);
+  //       }
+  //     } else {
+  //       await setUserInfo(user);
+  //       console.log('Outer User ;-', user);
+  //       await navigation.navigate('Mobile_Number');
+  //       // setMobileModalVisible(true);
+  //     }
+  //   } catch (error) {
+  //     console.error('Firestore check failed:', error);
+  //     Alert.alert('Error', 'Failed to check user data.');
+  //   }
+  // };
+
   const checkUserInFirestore = async (user: UserInfo) => {
     try {
       const userRef = firestore().collection('employees').doc(user.id);
       const docSnapshot = await userRef.get();
- 
+
       if (docSnapshot.exists) {
         const existingUser = docSnapshot.data();
         if (existingUser?.mobilePhone) {
           await store.dispatch(loginUser({userEmail: existingUser.email}));
           navigation.navigate('HomeScreen');
         } else {
-          setUserInfo(user);
-          setMobileModalVisible(true);
+          console.log('User needs to enter mobile number.');
+          navigation.navigate('Mobile_Number', {user}); // Passing user as param
         }
       } else {
-        setUserInfo(user);
-        setMobileModalVisible(true);
+        console.log('New user detected, navigating to Mobile Number screen.');
+        navigation.navigate('Mobile_Number', {user}); // Passing user as param
       }
     } catch (error) {
       console.error('Firestore check failed:', error);
       Alert.alert('Error', 'Failed to check user data.');
     }
   };
- 
+
   // Microsoft authentication handler
   const onMicrosoftButtonPress = async () => {
     const provider = new auth.OAuthProvider('microsoft.com');
@@ -101,11 +129,11 @@ function LoginScreenEffect() {
       prompt: 'consent',
       tenant: 'cff49e6f-1c62-41ba-9576-57fae5162848',
     });
- 
+
     try {
       const result = await auth().signInWithRedirect(provider);
       const userData = result?.additionalUserInfo?.profile as UserInfo;
- 
+
       if (userData) {
         checkUserInFirestore(userData);
       }
@@ -114,19 +142,34 @@ function LoginScreenEffect() {
       Alert.alert('Sign-In Failed', 'Something went wrong. Please try again.');
     }
   };
- 
+
   // Handle mobile number submission
-  const handleMobileSubmit = async () => {
+  // const handleMobileSubmit = async () => {
+  //   console.log('first :-', userInfo);
+  //   if (!mobileNumber || mobileNumber.length < 10) {
+  //     Alert.alert('Invalid', 'Please enter a valid mobile number.');
+  //     return;
+  //   }
+
+  //   if (userInfo) {
+  //     console.log('in if condition first :-', userInfo);
+  //     await saveUserToFirestore(userInfo, mobileNumber);
+  //   }
+  // };
+  const handleMobileSubmit = async (userInfo: UserInfo) => {
     if (!mobileNumber || mobileNumber.length < 10) {
       Alert.alert('Invalid', 'Please enter a valid mobile number.');
       return;
     }
- 
+
     if (userInfo) {
+      console.log('Saving user data with mobile number:', userInfo);
       await saveUserToFirestore(userInfo, mobileNumber);
+    } else {
+      Alert.alert('Error', 'User data is missing.');
     }
   };
- 
+
   return {
     onMicrosoftButtonPress,
     handleMobileSubmit,
@@ -135,5 +178,5 @@ function LoginScreenEffect() {
     mobileModalVisible,
   };
 }
- 
+
 export default LoginScreenEffect;
