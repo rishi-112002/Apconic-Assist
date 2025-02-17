@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import StringConstants from "../../assest/constants/StringsConstants";
-const { ON_LEAVE, OUTSIDE, EMAIL, NAME, EMPLOYEES, MOBILE_NO, STATUS,  EMPLOYEE_ID, UNKNOWN, STATUSLOG } = StringConstants();
+const { ON_LEAVE, OUTSIDE, EMAIL, NAME, EMPLOYEES, MOBILE_NO, STATUS, EMPLOYEE_ID, UNKNOWN, STATUSLOG } = StringConstants();
 export const loginUser = createAsyncThunk(
     "Login User",
     async (
@@ -68,7 +68,7 @@ export const CheckUserlogin = createAsyncThunk(
             if (userName && userEmail && mobileNo && userStatus && UserId) {
                 return detail;
             } else {
-              
+
                 return thunkAPI.rejectWithValue("ERROR");
             }
         } catch (error) {
@@ -107,6 +107,24 @@ export const updateStatus = createAsyncThunk(
             let docId = null;
             let From = null;
             let To = null;
+            const getCurrentFormattedTime = () => {
+                const now = new Date();
+            
+                // Extract month, day, and year separately
+                const optionsDate = { month: "long" as const, day: "numeric" as const, year: "numeric" as const };
+                let formattedDate = new Intl.DateTimeFormat("en-US", optionsDate).format(now);
+            
+                // Remove the comma between day and year
+                formattedDate = formattedDate.replace(",", "");
+            
+                // Format time separately
+                const optionsTime = { hour: "numeric" as const, minute: "numeric" as const, second: "numeric" as const, hour12: true };
+                const formattedTime = new Intl.DateTimeFormat("en-US", optionsTime).format(now);
+            
+                return `${formattedDate} at ${formattedTime}`;
+            };
+            
+            console.log("current time ", getCurrentFormattedTime()); // Example: "February 18 2025 at 3:13:00 PM"
 
             const statusLogRef = firestore()
                 .collection(EMPLOYEES)
@@ -117,14 +135,14 @@ export const updateStatus = createAsyncThunk(
             if (newStatus === OUTSIDE) {
                 const docRef = await statusLogRef.add({
                     status: newStatus,
-                    From: firestore.FieldValue.serverTimestamp(),
+                    From: getCurrentFormattedTime(),
                     To: "",
-                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                    statusUpdatedAt: getCurrentFormattedTime(),
                 });
 
                 docId = docRef.id;
-                From = firestore.FieldValue.serverTimestamp();
-                To = "";
+                From = getCurrentFormattedTime(),
+                    To = "";
             }
             else if (newStatus === ON_LEAVE) {
 
@@ -132,7 +150,7 @@ export const updateStatus = createAsyncThunk(
                     status: newStatus,
                     From: FromValue ? FromValue : '',
                     To: tovalue ? tovalue : "",
-                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                    statusUpdatedAt: getCurrentFormattedTime(),
                 });
 
                 docId = docRef.id;
@@ -142,7 +160,7 @@ export const updateStatus = createAsyncThunk(
             else {
                 const docRef = await statusLogRef.add({
                     status: newStatus,
-                    statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                    statusUpdatedAt: getCurrentFormattedTime(),
                 });
 
                 docId = docRef.id;
@@ -157,22 +175,17 @@ export const updateStatus = createAsyncThunk(
                     .where(STATUS, "==", OUTSIDE)
                     .limit(1)
                     .get();
-
-
-
                 if (!querySnapshot.empty) {
                     const lastOutsideDoc = querySnapshot.docs[0];
 
                     await statusLogRef.doc(lastOutsideDoc.id).update({
-                        To: firestore.FieldValue.serverTimestamp(),
+                        To: getCurrentFormattedTime()
                     });
-
-                   
                 }
             }
             await firestore().collection(EMPLOYEES).doc(employeeId).update({
                 status: newStatus,
-                statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
+                statusUpdatedAt: getCurrentFormattedTime(),
                 From: From,
                 To: To
             });
