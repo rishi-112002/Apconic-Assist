@@ -12,3 +12,8 @@ export interface UserInfo {
     surname: string;
     userPrincipalName: string;
   }
+ export  const statusOptions = [
+    { label: 'Present', value: 'Present' },
+    { label: 'On-leave', value: 'On-leave' },
+    { label: 'Outside', value: 'Outside' },
+];

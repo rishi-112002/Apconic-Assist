@@ -22,7 +22,7 @@ export const STYLES = StyleSheet.create({
   },
   value: {
     fontWeight: "400",
-    fontSize: 14,
+    fontSize: 12,
     color: colors.PrimaryTextColor
   },
   container: {
@@ -79,22 +79,22 @@ export const STYLES = StyleSheet.create({
     color: colors.gray,
     marginBottom: 20,
     textAlign: 'center',
-  },  
+  },
   calendarModalContainer: {
     flex: 1,
     padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.darkerTransparent,  // Darker transparent background
-},
-CalendarContainer: {
-  padding: 20,
-  backgroundColor: colors.BabyBlue,
-  borderRadius: 10,
-  borderWidth: 1,
-  borderColor: colors.gray,
-  color:colors.PrimaryTextColor
-},
+  },
+  CalendarContainer: {
+    padding: 20,
+    backgroundColor: colors.BabyBlue,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    color: colors.PrimaryTextColor
+  },
   cardContent: {
     flex: 9,
   },
@@ -117,7 +117,7 @@ CalendarContainer: {
     justifyContent: 'space-between',
   },
   label: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
   },
   callButtonContainer: {
@@ -171,7 +171,7 @@ CalendarContainer: {
     marginBottom: 15,
   },
   microsoftButton:
-    { flexDirection: 'row', gap: 15, backgroundColor: colors.BabyBlue, padding: 10, borderRadius: 5 },
+    { flexDirection: 'row',textAlign: "center", gap: 15, backgroundColor: colors.BabyBlue, padding: 10, borderRadius: 5 },
   input: {
     width: '100%',
     padding: 10,

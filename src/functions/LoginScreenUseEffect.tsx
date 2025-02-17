@@ -49,7 +49,7 @@ function LoginScreenEffect() {
           email: user.mail,
           mobilePhone: mobilePhone,
           statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
-          status: 'Unknown',
+          status: 'Present',
           UID: currentUser.uid,
         },
         {merge: true},

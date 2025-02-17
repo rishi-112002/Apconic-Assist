@@ -5,16 +5,12 @@ import { useSelector } from 'react-redux';
 import { RootState, store } from '../redux/Store';
 import colors from '../assest/color/colors';
 import { updateStatus } from '../redux/login/LoginAction';
+import { statusOptions } from '../assest/constants/InterfaceConstants';
 
-const statusOptions = [
-    { label: 'Present', value: 'Present' },
-    { label: 'On-leave', value: 'On-leave' },
-    { label: 'Outside', value: 'Outside' },
-    { label: 'Unknown', value: 'Unknown' },
-];
 
-function DropdownComponent(props: { setCalendarVisible: any, value: any, isFocus: any, setIsFocus: any, tovalue: any, FromValue: any }) {
-    const { value, isFocus, setIsFocus, setCalendarVisible, tovalue, FromValue } = props;
+
+function DropdownComponent(props: { setCalendarVisible: any, value: any, isFocus: any, setIsFocus: any }) {
+    const { value, isFocus, setIsFocus, setCalendarVisible } = props;
     const employeeId = useSelector(
         (state: RootState) => state.authentication.employeeId,
     );
@@ -26,8 +22,6 @@ function DropdownComponent(props: { setCalendarVisible: any, value: any, isFocus
                 return { backgroundColor: colors.softOrange, color: "orange" };
             case 'On-leave':
                 return { backgroundColor: colors.redSoftner, color: colors.redDarkest };
-            case 'Unknown':
-                return { backgroundColor: 'white', color: 'gray' };
             default:
                 return {};
         }
@@ -59,12 +53,12 @@ function DropdownComponent(props: { setCalendarVisible: any, value: any, isFocus
                     if (item.value !== "On-leave") {
                         store.dispatch(updateStatus({ status: value, employeeId: employeeId, newStatus: item.value, tovalue: "", FromValue: "" }));
                     }
-                    else{
-                        
-                        setCalendarVisible(true) 
+                    else {
+
+                        setCalendarVisible(true)
+                    }
                 }
-            }
-        }
+                }
             />
         </View>
     );

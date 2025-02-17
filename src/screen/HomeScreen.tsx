@@ -14,16 +14,7 @@ function HomeScreen() {
   const closeCalendarModal = () => setCalendarVisible(false);
   const [tovalue, setToValue] = useState<string>('');
   const [fromValue, setFromValue] = useState<string>('');
-
-  console.log("fromValue", fromValue)
-  console.log("tovalue", tovalue)
-
-  console.log("status in homeScreen ", status)
-  const handleDateSelect = (formattedDate: string, dateValue: any, type: 'from' | 'to') => {
-    // console.log(`Selected ${type} date:`, dateValue, formattedDate);
-    console.log("formated date in handleDate selecte", formattedDate)
-    console.log("date value in handleDate selecte", dateValue)
-
+  const handleDateSelect = (formattedDate: string, _dateValue: any, type: 'from' | 'to') => {
     if (type === 'from') {
       setFromValue(formattedDate); // Update "From" date
     } else {
@@ -41,9 +32,10 @@ function HomeScreen() {
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
+  
+
   return (
     <View style={STYLES.container}>
-      {/* <LeaveModal visible={modalVisible} onClose={closeCalendarModal} employeeId={} /> */}
       <TopLeftModal modalVisible={modalVisible} setModalVisible={setModalVisible} value={status} setCalendarVisible={setCalendarVisible} tovalue={tovalue} FromValue={fromValue} />
       <CustomDateTimePicker
         visible={isCalendarVisible}
