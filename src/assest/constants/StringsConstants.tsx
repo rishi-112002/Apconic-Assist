@@ -20,7 +20,7 @@ function StringConstants() {
     "  Mark Your Attendance & Stay Updated on Your Team's Status";
   const SIGN_IN_WITH_APCONIC_ACCOUNT =
     ' Sign in with your Apconic account to get started';
-  const MobileNumberText = 'Primary Mobile Number Require';
+  const MobileNumberText = 'Primary Mobile Number';
   const SubmitText = 'Submit';
   return {
     MobileNumberText,

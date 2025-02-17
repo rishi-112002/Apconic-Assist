@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { StyleSheet } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import colors from '../assest/color/colors';
 export const STYLES = StyleSheet.create({
   Splash_ringContainer: {
@@ -39,7 +39,7 @@ export const STYLES = StyleSheet.create({
     borderLeftColor: colors.white,
     borderTopColor: colors.white,
     shadowColor: '#fff',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
@@ -60,12 +60,6 @@ export const STYLES = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    // justifyContent: 'center',
-    // elevation: 10, // Android shadow
-    // shadowColor: '#000',
-    // shadowOffset: {width: 0, height: 2},
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
   },
   modalContent: {
     width: '100%',
@@ -87,7 +81,7 @@ export const STYLES = StyleSheet.create({
     padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.darkerTransparent, // Darker transparent background
+    backgroundColor: colors.darkerTransparent,  // Darker transparent background
   },
   CalendarContainer: {
     padding: 20,
@@ -119,8 +113,8 @@ export const STYLES = StyleSheet.create({
     justifyContent: 'space-between',
   },
   label: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '500',
   },
   callButtonContainer: {
     flex: 1,
@@ -141,14 +135,14 @@ export const STYLES = StyleSheet.create({
     resizeMode: 'center',
     tintColor: colors.greenDarkest,
   },
-  mainContainer: {flex: 1, alignItems: 'center', backgroundColor: colors.white},
+  mainContainer: { flex: 1, alignItems: 'center', backgroundColor: colors.white },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  Logo: {width: 200, height: 200, resizeMode: 'center'},
+  Logo: { width: 200, height: 200, resizeMode: 'center' },
   ContactLogo: {
     width: 100,
     height: 100,
@@ -179,7 +173,7 @@ export const STYLES = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
-  subContainer: {flex: 1, alignItems: 'center'},
+  subContainer: { flex: 1, alignItems: 'center' },
   loginTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -190,6 +184,7 @@ export const STYLES = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 15,
   },
+
   microsoftButton: {
     flexDirection: 'row',
     gap: 15,
@@ -202,18 +197,17 @@ export const STYLES = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    // borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 15,
     textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
-    width: '100%',
     justifyContent: 'space-between',
   },
   button: {
-    flex: 1,
+    // flex: 1,
     padding: 10,
     alignItems: 'center',
     borderRadius: 5,

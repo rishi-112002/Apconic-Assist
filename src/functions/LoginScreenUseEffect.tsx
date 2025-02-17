@@ -1,16 +1,15 @@
-import {useNavigation, NavigationProp} from '@react-navigation/native';
-import {useState} from 'react';
-import {Alert} from 'react-native';
-import {AuthStackScreenName} from '../navigation/HomeNavigation';
-import {loginUser} from '../redux/login/LoginAction';
-import {store} from '../redux/Store';
-import {UserInfo} from '../assest/constants/InterfaceConstants';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useState } from 'react';
+import { Alert } from 'react-native';
+import { AuthStackScreenName } from '../navigation/HomeNavigation';
+import { loginUser } from '../redux/login/LoginAction';
+import { store } from '../redux/Store';
+import { UserInfo } from '../assest/constants/InterfaceConstants';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
 function LoginScreenEffect() {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [mobileModalVisible, setMobileModalVisible] = useState(false);
   const [mobileNumber, setMobileNumber] = useState('');
   const navigation = useNavigation<NavigationProp<AuthStackScreenName>>();
@@ -23,7 +22,7 @@ function LoginScreenEffect() {
         await firestore()
           .collection('employees')
           .doc(userId)
-          .set({fcmToken: token}, {merge: true});
+          .set({ fcmToken: token }, { merge: true });
       }
     } catch (error) {
       console.error('Error getting FCM token:', error);
@@ -50,13 +49,13 @@ function LoginScreenEffect() {
           email: user.mail,
           mobilePhone: mobilePhone,
           statusUpdatedAt: firestore.FieldValue.serverTimestamp(),
-          status: 'Unknown',
+          status: 'Present',
           UID: currentUser.uid,
         },
-        {merge: true},
+        { merge: true },
       );
       if (user.mail) {
-        await store.dispatch(loginUser({userEmail: user.mail}));
+        await store.dispatch(loginUser({ userEmail: user.mail }));
       } else {
         console.error('User email is null');
         Alert.alert('Error', 'User email is null.');
@@ -67,36 +66,6 @@ function LoginScreenEffect() {
       Alert.alert('Error', 'Failed to save user data.');
     }
   };
-
-  // Check if user exists in Firestore
-  // const checkUserInFirestore = async (user: UserInfo) => {
-  //   try {
-  //     const userRef = firestore().collection('employees').doc(user.id);
-  //     const docSnapshot = await userRef.get();
-
-  //     if (docSnapshot.exists) {
-  //       const existingUser = docSnapshot.data();
-  //       if (existingUser?.mobilePhone) {
-  //         await store.dispatch(loginUser({userEmail: existingUser.email}));
-  //         navigation.navigate('HomeScreen');
-  //       } else {
-  //         setUserInfo(user);
-  //         console.log('Inner User ;-', user);
-  //         navigation.navigate('Mobile_Number');
-  //         // setMobileModalVisible(true);
-  //       }
-  //     } else {
-  //       await setUserInfo(user);
-  //       console.log('Outer User ;-', user);
-  //       await navigation.navigate('Mobile_Number');
-  //       // setMobileModalVisible(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Firestore check failed:', error);
-  //     Alert.alert('Error', 'Failed to check user data.');
-  //   }
-  // };
-
   const checkUserInFirestore = async (user: UserInfo) => {
     try {
       const userRef = firestore().collection('employees').doc(user.id);
@@ -105,15 +74,15 @@ function LoginScreenEffect() {
       if (docSnapshot.exists) {
         const existingUser = docSnapshot.data();
         if (existingUser?.mobilePhone) {
-          await store.dispatch(loginUser({userEmail: existingUser.email}));
+          await store.dispatch(loginUser({ userEmail: existingUser.email }));
           navigation.navigate('HomeScreen');
         } else {
           console.log('User needs to enter mobile number.');
-          navigation.navigate('Mobile_Number', {user}); // Passing user as param
+          navigation.navigate('Mobile_Number', { user }); // Passing user as param
         }
       } else {
         console.log('New user detected, navigating to Mobile Number screen.');
-        navigation.navigate('Mobile_Number', {user}); // Passing user as param
+        navigation.navigate('Mobile_Number', { user }); // Passing user as param
       }
     } catch (error) {
       console.error('Firestore check failed:', error);

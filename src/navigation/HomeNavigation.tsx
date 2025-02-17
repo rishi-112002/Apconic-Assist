@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screen/LoginScreen';
 import HomeScreen from '../screen/HomeScreen';
 import SplashScreen from '../screen/SplashScreen';
@@ -9,7 +9,7 @@ export type AuthStackScreenName = {
   HomeScreen: undefined; // Ensuring HomeScreen gets userInfo
   LoginScreen: undefined;
   SplashScreen: undefined;
-  Mobile_Number: undefined;
+  Mobile_Number: { user: any };
 };
 
 const Stack = createStackNavigator<AuthStackScreenName>();
@@ -20,20 +20,19 @@ function AuthStack() {
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Mobile_Number"
+        component={MobileNumber}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Mobile_Number"
-        component={MobileNumber}
-        options={{headerShown: false}}
-      />
-
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
@@ -42,8 +41,7 @@ function AuthStack() {
             elevation: 0,
             shadowOpacity: 0,
           },
-        }}
-      />
+        }} />
     </Stack.Navigator>
   );
 }

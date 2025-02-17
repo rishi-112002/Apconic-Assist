@@ -24,7 +24,13 @@ function UserList(props: { item: any, makeCall: any }) {
                         {item.status !== PRESENT && (
                             <Text style={STYLES.label}>
                                 {item.status === ON_LEAVE ? ON_LEAVE_FROM : item.status === OUTSIDE ? OUTSIDE_FROM : STATUS_UPDATED_AT}:
-                                <Text style={STYLES.value}>{new Date(item?.stausUpdatedAt?.toDate()).toLocaleString()}</Text>
+                                <Text style={STYLES.value}>   {item.From.split(' at ')[0]}</Text>
+                            </Text>
+                        )}
+                        {item.To !== null && (
+                            <Text style={STYLES.label}>
+                                On Leave To :
+                                <Text style={STYLES.value}>   {item.To.split(' at ')[0]}</Text>
                             </Text>
                         )}
                     </View>

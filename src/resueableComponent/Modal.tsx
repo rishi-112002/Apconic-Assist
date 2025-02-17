@@ -23,9 +23,7 @@ const TopLeftModal = (props: { setCalendarVisible: any, modalVisible: any, setMo
                             setCalendarVisible={setCalendarVisible}
                             value={value}
                             isFocus={isFocus}
-                            setIsFocus={setIsFocus}
-                            tovalue={tovalue}
-                            FromValue={FromValue} />
+                            setIsFocus={setIsFocus}/>
                         <TouchableOpacity onPress={handleLogout} style={styles.option}>
                             <Text style={styles.optionText}>Logout</Text>
                         </TouchableOpacity>
