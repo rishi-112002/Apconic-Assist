@@ -19,11 +19,11 @@ const TopLeftModal = (props: { setCalendarVisible: any, modalVisible: any, setMo
                 <TouchableOpacity style={styles.overlay} onPress={() => setModalVisible(false)}>
                     <View style={styles.modalView}>
                         {/* Logout Option */}
-                        <DropdownComponent
+                        {/* <DropdownComponent
                             setCalendarVisible={setCalendarVisible}
                             value={value}
                             isFocus={isFocus}
-                            setIsFocus={setIsFocus}/>
+                            setIsFocus={setIsFocus}/> */}
                         <TouchableOpacity onPress={handleLogout} style={styles.option}>
                             <Text style={styles.optionText}>Logout</Text>
                         </TouchableOpacity>

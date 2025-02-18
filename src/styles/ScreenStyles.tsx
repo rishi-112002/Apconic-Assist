@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {StyleSheet} from 'react-native';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assest/color/colors';
 export const STYLES = StyleSheet.create({
   Splash_ringContainer: {
@@ -39,7 +39,7 @@ export const STYLES = StyleSheet.create({
     borderLeftColor: colors.white,
     borderTopColor: colors.white,
     shadowColor: '#fff',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
@@ -54,7 +54,7 @@ export const STYLES = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
   },
   modalContainer: {
-    width:"100%",
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
@@ -80,7 +80,7 @@ export const STYLES = StyleSheet.create({
     padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.darkerTransparent,  // Darker transparent background
+    backgroundColor: colors.darkerTransparent, // Darker transparent background
   },
   CalendarContainer: {
     padding: 20,
@@ -94,7 +94,7 @@ export const STYLES = StyleSheet.create({
     flex: 9,
   },
   statusContainer: {
-    width: '20%',
+    width: '25%',
     paddingVertical: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -134,14 +134,14 @@ export const STYLES = StyleSheet.create({
     resizeMode: 'center',
     tintColor: colors.greenDarkest,
   },
-  mainContainer: { flex: 1, alignItems: 'center', backgroundColor: colors.white },
+  mainContainer: {flex: 1, alignItems: 'center', backgroundColor: colors.white},
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  Logo: { width: 200, height: 200, resizeMode: 'center' },
+  Logo: {width: 200, height: 200, resizeMode: 'center'},
   ContactLogo: {
     width: 100,
     height: 100,
@@ -172,7 +172,7 @@ export const STYLES = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
-  subContainer: { flex: 1, alignItems: 'center' },
+  subContainer: {flex: 1, alignItems: 'center'},
   loginTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -199,10 +199,10 @@ export const STYLES = StyleSheet.create({
     // borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 15,
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   buttonContainer: {
-    width:"100%",
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -223,3 +223,31 @@ export const STYLES = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export const HomeSTYLES = {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 0,
+    backgroundColor: '#ffff',
+    elevation: 5,
+    shadowOpacity: 5,
+  },
+  statusButton: {
+    padding: 0,
+    borderRadius: 2,
+    backgroundColor: '#ddd',
+  },
+  selectedStatusButton: {
+    backgroundColor: '#007bff',
+  },
+  statusText: {
+    fontSize: 5,
+    color: '#000',
+  },
+};
