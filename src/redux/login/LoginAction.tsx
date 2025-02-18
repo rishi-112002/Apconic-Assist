@@ -109,21 +109,21 @@ export const updateStatus = createAsyncThunk(
             let To = null;
             const getCurrentFormattedTime = () => {
                 const now = new Date();
-            
+
                 // Extract month, day, and year separately
                 const optionsDate = { month: "long" as const, day: "numeric" as const, year: "numeric" as const };
                 let formattedDate = new Intl.DateTimeFormat("en-US", optionsDate).format(now);
-            
+
                 // Remove the comma between day and year
                 formattedDate = formattedDate.replace(",", "");
-            
+
                 // Format time separately
                 const optionsTime = { hour: "numeric" as const, minute: "numeric" as const, second: "numeric" as const, hour12: true };
                 const formattedTime = new Intl.DateTimeFormat("en-US", optionsTime).format(now);
-            
+
                 return `${formattedDate} at ${formattedTime}`;
             };
-            
+
             console.log("current time ", getCurrentFormattedTime()); // Example: "February 18 2025 at 3:13:00 PM"
 
             const statusLogRef = firestore()
