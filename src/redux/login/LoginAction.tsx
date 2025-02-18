@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';

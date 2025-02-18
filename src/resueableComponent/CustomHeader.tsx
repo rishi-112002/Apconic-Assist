@@ -1,51 +1,74 @@
-import {
-  Animated,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-function CustomHeader({ title, searchIcon, filterIcon, translateY }: any) {
+import { Pressable, Text, View } from 'react-native';
+import { HomeSTYLES } from '../styles/ScreenStyles';
+import TopLeftModal from './Modal';
+import colors from '../assest/color/colors';
 
-  const Navigations = useNavigation();
-//   const openDrawer = useCallback(() => {
-//     Navigations.dispatch(DrawerActions.toggleDrawer());
-//   }, [Navigations]);
+function CustomHeader(props: {
+  handleStatusChange: (status: string) => void;
+  selectedStatus: string;
+  status: string;
+  viewModal: boolean;
+  setModal: (visible: boolean) => void;
+}) {
+  const { handleStatusChange, selectedStatus, status, viewModal, setModal } = props;
 
+  const STATUS_OPTIONS = ['Present', 'On Leave', 'Outside'];
 
+  const getStatusStyle = (option: string) => {
+    switch (option) {
+      case 'Present':
+        return { backgroundColor: colors.greenSoftneer, textColor: colors.greenDarkest };
+      case 'Outside':
+        return { backgroundColor: colors.softOrange, textColor: 'orange' };
+      case 'On Leave':
+        return { backgroundColor: colors.redSoftner, textColor: colors.redDarkest };
+      default:
+        return { backgroundColor: '#ddd', textColor: '#000' }; // Default for non-selected
+    }
+  };
+
+  
 
   return (
-    <Animated.View
-      style={{
-        transform: [{ translateY: translateY }],
-        zIndex: 1,
-        position: "absolute",
-        left: 0,
-        right: 0,
-        height: 60
-      }}>
-      <View style={{}}>
-        <View style={{}}>
-          {/* <TouchableOpacity onPress={openDrawer}>
-            <MaterialIcons
-              name={IconName.MENU}
-              size={28}
-              color={colors.darkblack}
-              style={{}}
-            />
-          </TouchableOpacity> */}
-          <Text style={{}}>{title}</Text>
-        </View>
-        {searchIcon && filterIcon &&
+    <View style={HomeSTYLES.headerContainer}>
+      <Text style={{ fontSize: 22, color: 'black', fontWeight: 'bold' }}>Employee</Text>
 
-          <View style={{}}>
-          </View>
-        }
+      <View style={{ flexDirection: 'row', gap: 10 }}> {/* Buttons in a row */}
+        {STATUS_OPTIONS.map(option => {
+          const isSelected = selectedStatus === option;
+          const { backgroundColor, textColor } = getStatusStyle(option);
+
+          return (
+            <Pressable
+              key={option}
+              onPress={() => handleStatusChange(option)}
+              style={[
+                HomeSTYLES.statusButton,
+                { backgroundColor: isSelected ? backgroundColor : '#ddd' }, // Only selected is colorful
+              ]}
+            >
+              <Text style={{ 
+                color: isSelected ? textColor : '#000', // Only selected has colored text
+                fontWeight: isSelected ? 'bold' : 'normal' 
+              }}>
+                {option}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
-    </Animated.View>
+
+      <TopLeftModal
+        modalVisible={viewModal}
+        setModalVisible={setModal}
+        value={status}
+        setCalendarVisible={undefined}
+        tovalue={undefined}
+        FromValue={undefined}
+      />
+    </View>
   );
 }
-export default CustomHeader;
 
+export default CustomHeader;

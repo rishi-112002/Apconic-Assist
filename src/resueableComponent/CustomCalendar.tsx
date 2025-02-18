@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Text, View } from 'react-native';
 import { STYLES } from '../styles/ScreenStyles';
 import colors from '../assest/color/colors';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/Store';
 
 export default function CustomDateTimePicker(props: { visible: any, onClose: any, onDateSelect: any }) {
     const { visible, onClose, onDateSelect } = props;
@@ -35,9 +33,9 @@ export default function CustomDateTimePicker(props: { visible: any, onClose: any
             second: '2-digit', // Second with leading zero if needed (e.g., 12)
             hour12: true,    // Use 12-hour format with AM/PM
         }).replace(',', '') // Remove extra comma after the month
-          .replace('AM', 'AM').replace('PM', 'PM'); // Ensure proper spacing
+            .replace('AM', 'AM').replace('PM', 'PM'); // Ensure proper spacing
     };
-    
+
 
     const handleDateChange = (params: any, type: 'from' | 'to') => {
         if (params?.date) {
@@ -58,6 +56,8 @@ export default function CustomDateTimePicker(props: { visible: any, onClose: any
             onDateSelect(formattedDate, selectedDate, type);
         }
     };
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     return (
         <Modal animationType="fade" transparent={true} visible={visible}>
@@ -75,12 +75,13 @@ export default function CustomDateTimePicker(props: { visible: any, onClose: any
                                 weekDaysTextStyle={{ color: colors.PrimaryTextColor }}
                                 mode="single"
                                 initialView="day"
+                                minDate={today} // User can only select today
+                                startDate={today}
                                 timePicker={true}
                                 onChange={(params: any) => handleDateChange(params, 'from')}
                             />
                         </View>
                     )}
-
                     {/* To Date Picker (Opens After Selecting From Date) */}
                     {showToPicker && (
                         <View style={{ marginBottom: 20 }}>
@@ -92,6 +93,7 @@ export default function CustomDateTimePicker(props: { visible: any, onClose: any
                                 weekDaysTextStyle={{ color: colors.PrimaryTextColor }}
                                 mode="single"
                                 initialView="day"
+                                minDate={today} // User can only select today
                                 timePicker={true}
                                 onChange={(params: any) => handleDateChange(params, 'to')}
                             />
