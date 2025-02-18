@@ -94,7 +94,7 @@ export const STYLES = StyleSheet.create({
     flex: 9,
   },
   statusContainer: {
-    width: '20%',
+    width: '25%',
     paddingVertical: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -199,7 +199,7 @@ export const STYLES = StyleSheet.create({
     // borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 15,
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   buttonContainer: {
     width: '100%',
@@ -233,21 +233,21 @@ export const HomeSTYLES = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    padding: 0,
     backgroundColor: '#ffff',
     elevation: 5,
     shadowOpacity: 5,
   },
   statusButton: {
-    padding: 5,
-    borderRadius: 5,
+    padding: 0,
+    borderRadius: 2,
     backgroundColor: '#ddd',
   },
   selectedStatusButton: {
     backgroundColor: '#007bff',
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 5,
     color: '#000',
   },
 };

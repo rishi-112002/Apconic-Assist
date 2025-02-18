@@ -7,9 +7,10 @@ import UserList from '../resueableComponent/userList';
 import CustomDateTimePicker from '../resueableComponent/CustomCalendar';
 import {store} from '../redux/Store';
 import {updateStatus} from '../redux/login/LoginAction';
+import StringConstants from '../assest/constants/StringsConstants';
 
 function HomeScreen() {
-  const [isCalendarVisible, setCalendarVisible] = useState(false);
+  // const [isCalendarVisible, setCalendarVisible] = useState(false);
   const {
     employees,
     loading,
@@ -18,10 +19,15 @@ function HomeScreen() {
     modalVisible,
     setModalVisible,
     status,
+    isCalendarVisible,
+    setCalendarVisible,
+    closeCalendarModal,
   } = HomeScreenEffect();
-  const closeCalendarModal = () => setCalendarVisible(false);
+  // const closeCalendarModal = () => setCalendarVisible(false);
   const [tovalue, setToValue] = useState<string>('');
   const [fromValue, setFromValue] = useState<string>('');
+  const {ON_LEAVE, PRESENT, OUTSIDE} = StringConstants();
+
   const handleDateSelect = (
     formattedDate: string,
     _dateValue: any,
@@ -35,7 +41,7 @@ function HomeScreen() {
         updateStatus({
           status: status ?? '',
           employeeId: userId,
-          newStatus: 'On-leave',
+          newStatus: ON_LEAVE,
           tovalue: formattedDate,
           FromValue: fromValue,
         }),
